@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# TensorFlow/Keras
+*.h5
+*.keras
+models/  # Não commitar modelos treinados
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dataset
+*.npy
+*.npz
+data/
+
+# Logs
+logs/
+tensorboard/
+
+# Sistema
+.DS_Store
+Thumbs.db
