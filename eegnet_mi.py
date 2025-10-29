@@ -12,7 +12,7 @@ from tensorflow.keras import backend as K
 import numpy as np
 
 
-class EEGNet_MI:
+class eegnet_mi:
     """
     Classe principal do EEGNet para classificação de Imaginação Motora
     """
@@ -33,7 +33,6 @@ class EEGNet_MI:
         
     def construir_modelo(self):
 
-        
         # entradano formato (canais, amostras, 1 canal de profundidade)
         entrada = Input(shape=(self.Chans, self.Samples, 1))
         
@@ -106,7 +105,7 @@ if __name__ == "__main__":
     
     try:
         # criando modelo
-        eegnet = EEGNet_MI(
+        eegnet = eegnet_mi(
             n_classes=4,    # 4 classes de imaginação motora
             Chans=64,       # 64 canais EEG
             Samples=512     # 512 amostras por trial
