@@ -6,7 +6,7 @@ from bciflow.modules.analysis.metric_functions import accuracy
 import pandas as pd
 from eegnet_mi import eegnet_mi
 
-dataset = cbcic(subject=1, path='../../data/cbcic/')
+dataset = cbcic(subject=1, path='C:/Users/Vitor/OneDrive/Documentos/EEGNet/temp_dataset/') #endereço pro meu pc
 
 pre_folding = {}
 clf = eegnet_mi(n_classes=2, Chans=12, Samples=250)
