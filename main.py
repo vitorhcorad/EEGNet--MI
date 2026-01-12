@@ -100,7 +100,7 @@ clf = eegnet_mi(n_classes=2, Chans=12, Samples=250)
 
 pos_folding = {
 
-    'clf': (clf, {})
+    'clf': (clf, {'epochs': 100, 'batch_size': 16})
 
 }
 
@@ -118,7 +118,7 @@ results = kfold(
 
 )
 
-
+#refatoração do código
 
 df = pd.DataFrame(results)
 

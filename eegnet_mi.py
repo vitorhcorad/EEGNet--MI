@@ -34,9 +34,9 @@ class eegnet_mi:
 
     def __init__(self, n_classes=4, Chans=64, Samples=128,
 
-                 dropoutRate=0.5, kernLength=64, F1=8,
+                 dropoutRate=0.5, kernLength=64, F1=16,
 
-                 D=4, F2=16, norm_rate=0.25):
+                 D=8, F2=32, norm_rate=0.25):
 
    
 
@@ -197,62 +197,26 @@ class eegnet_mi:
    
 
     def fit(self, X, y, epochs=50, batch_size=16, validation_split=0.2, verbose=0):
-
-        """
-
-        Método fit necessário para compatibilidade com kfold
-
-        """
-
-        # confere
-
-        if len(X.shape) == 3:
-
-            X = X.reshape(X.shape[0], 1, X.shape[1], X.shape[2])
-
-       
-
-        # redimensiona
-
-        if X.shape[3] != self.Samples:
-
-            X = self._redimensionar_dados(X, self.Samples)
-
-       
-
-        # Criar modelo (se não existir)
-
-        if self.model is None:
-
-            self.model = self.compilar_modelo()
-
-       
-
-        # converter y
-
-        if len(y.shape) == 1:
-
-            y = tf.keras.utils.to_categorical(y, self.n_classes)
-
-       
-
-        history = self.model.fit(
-
-            X, y,
-
-            epochs=epochs,
-
-            batch_size=batch_size,
-
-            validation_split=validation_split,
-
-            verbose=verbose
-
-        )
-
-       
-
-        return self
+            # Garante o shape (batch, 1, channels, samples)
+            if len(X.shape) == 3:
+                X = X.reshape(X.shape[0], 1, X.shape[1], X.shape[2])
+            
+            # Redimensiona temporalmente se necessário
+            if X.shape[3] != self.Samples:
+                X = self._redimensionar_dados(X, self.Samples)
+            
+            # Converte labels para One-Hot (essencial para categorical_crossentropy)
+            if len(y.shape) == 1 or y.shape[1] == 1:
+                y = tf.keras.utils.to_categorical(y, self.n_classes)
+            
+            self.model.fit(
+                X, y,
+                epochs=epochs,
+                batch_size=batch_size,
+                validation_split=validation_split,
+                verbose=verbose
+            )
+            return self
 
 
 
@@ -293,23 +257,19 @@ class eegnet_mi:
 
 
     def predict(self, X):
+            """Retorna as classes (0, 1, 2...)"""
+            # Garante o shape (Batch, 1, Chans, Samples)
+            if len(X.shape) == 3:
+                X = X.reshape(X.shape[0], 1, X.shape[1], X.shape[2])
+            
+            preds = self.model.predict(X, verbose=0)
+            return np.argmax(preds, axis=1)
 
-        """
-
-        Método predict necessário para compatibilidade com kfold
-
-        """
-
+    def predict_proba(self, X):
+        """Retorna as probabilidades (0.85, 0.15...)"""
         if len(X.shape) == 3:
-
             X = X.reshape(X.shape[0], 1, X.shape[1], X.shape[2])
-
-       
-
-        predictions = self.model.predict(X, verbose=0)
-
-        return np.argmax(predictions, axis=1)
-
+        return self.model.predict(X, verbose=0)
 
 
 # teste da classe
@@ -364,7 +324,6 @@ if __name__ == "__main__":
 
         print(f"✅ Predições realizadas: {predicoes.shape}")
 
-        print("🎉 EEGNet funcionando perfeitamente!")
 
        
 
