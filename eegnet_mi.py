@@ -32,11 +32,11 @@ class eegnet_mi:
 
    
 
-    def __init__(self, n_classes=4, Chans=64, Samples=128,
+    def __init__(self, n_classes=2, Chans=3, Samples=256,
 
-                 dropoutRate=0.5, kernLength=64, F1=16,
+                 dropoutRate=0.5, kernLength=64, F1=8,
 
-                 D=8, F2=32, norm_rate=0.25):
+                 D=2, F2=32, norm_rate=0.25):
 
    
 
